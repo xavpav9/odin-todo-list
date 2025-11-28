@@ -13,3 +13,67 @@
   font-family: "ZT-Nature", Arial, system-ui, sans-serif;
   font-weight: 600;
 }
+
+body {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 4fr 36fr 3fr;
+
+}
+
+div.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-weight: 700;
+  font-size: 1.6rem;
+
+  background-image: linear-gradient(90deg, orange, 50%, red);
+}
+
+div#content {
+  display: grid;
+  grid-template: 1fr / 3fr 1fr;
+  overflow: auto;
+
+  div.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 250px);
+    grid-auto-rows: 200px;
+    gap: 40px 20px;
+
+    background-color: #ffffd0;
+    padding: 20px;
+
+    .card {
+      box-sizing: border-box;
+      background-color: white;
+      border: 2px solid black;
+      padding: 10px;
+    }
+  }
+
+  div.projects-container {
+    background-color: #8f008f;
+
+  }
+}
+
+div.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 40px;
+  background-color: blue;
+
+  a, p {
+    color: white;
+    text-decoration: none;
+  }
+
+  svg {
+    stroke: white;
+  }
+}

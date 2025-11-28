@@ -48,5 +48,7 @@ const screenController = (function() {
   return { displayDomForItem }
 })();
 
-const item = new Item("Eating", "I need to eat", "12th March", "1", "I am just really hungry");
-screenController.displayDomForItem(item);
+for (let i = 0; i < 13; ++i) {
+  const item = new Item("Eating", "I need to eat", "12th March", "1", "I am just really hungry");
+  screenController.displayDomForItem(item);
+}
