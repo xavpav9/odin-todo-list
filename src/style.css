@@ -1,0 +1,15 @@
+*, *::after, *::before {
+  padding: 0px;
+  margin: 0px;
+  line-height: 1.5;
+}
+
+:root * {
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+:root {
+  font-family: "ZT-Nature", Arial, system-ui, sans-serif;
+  font-weight: 600;
+}
