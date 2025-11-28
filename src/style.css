@@ -40,7 +40,7 @@ div#content {
 
   div.cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 250px);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
     grid-auto-rows: 200px;
     gap: 40px 20px;
 
@@ -56,8 +56,26 @@ div#content {
   }
 
   div.projects-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+    padding: 20px 0px;
     background-color: #8f008f;
 
+    .project {
+      appearance: none;
+      cursor: pointer;
+      background-color: antiquewhite;
+      width: 90%;
+      height: 80px;
+      font-size: 1rem;
+      border: 2px solid black;
+
+      &.selected {
+        background-color: #fad0c0;
+      }
+    }
   }
 }
 
