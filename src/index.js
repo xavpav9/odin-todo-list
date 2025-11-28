@@ -2,9 +2,18 @@ import "./font-styles.css";
 import "./style.css";
 import Item from "./todo-item.js";
 
-const contentDiv = document.querySelector("div#content");
-
 const screenController = (function() {
+
+  const contentDiv = document.querySelector("div#content");
+
+  const cardsContainer = document.createElement("div");
+  cardsContainer.classList.add("cards-container");
+  const projectsContainer = document.createElement("div");
+  projectsContainer.classList.add("projects-container");
+
+  contentDiv.appendChild(cardsContainer);
+  contentDiv.appendChild(projectsContainer);
+
   function displayDomForItem(item) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -33,7 +42,7 @@ const screenController = (function() {
       card.appendChild(part)
     });
 
-    contentDiv.appendChild(card);
+    cardsContainer.appendChild(card);
   }
 
   return { displayDomForItem }
