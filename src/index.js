@@ -107,13 +107,12 @@ const notesController = (function() {
     projects.push({name, items: []});
 
     project.addEventListener("click", evt => {
-      if (evt.target === project) {
-        changeToProject(+project.dataset.number)
-      }
+      changeToProject(+project.dataset.number)
     });
 
     if (removeBtn !== null) {
-      removeBtn.addEventListener("click", () => {
+      removeBtn.addEventListener("click", evt => {
+        evt.stopPropagation();
         const projectNumber = +removeBtn.parentNode.dataset.number;
         removeProject(projectNumber);
       });
