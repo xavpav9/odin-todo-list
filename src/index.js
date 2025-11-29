@@ -151,6 +151,13 @@ const notesController = (function() {
   });
 
   document.querySelector(".create-container .add-item-btn").addEventListener("click", evt => {
+    document.querySelector(".expand-dialog #title").value = "";
+    document.querySelector(".expand-dialog #description").value = "";
+    document.querySelector(".expand-dialog #due-date").value = "";
+    document.querySelector(".expand-dialog #notes").value = "";
+    document.querySelector(".expand-dialog .checklist").textContent = "";
+    document.querySelector(".expand-dialog #add-check").value = "";
+    document.querySelector(".expand-dialog #priority").value = "";
     document.querySelector("dialog.expand-dialog").showModal();
   });
 
@@ -171,16 +178,42 @@ const notesController = (function() {
     }
   });
 
+  document.querySelector(".expand-dialog .add-check-btn").addEventListener("click", evt => {
+    evt.preventDefault();
+
+  });
+
+  document.querySelector(".expand-dialog .save").addEventListener("click", evt => {
+    evt.preventDefault();
+    const projectNumber = currentProject;
+    const titleInput = document.querySelector(".expand-dialog #title").value;
+    const descriptionInput = document.querySelector(".expand-dialog #description").value;
+    const dueDateInput = document.querySelector(".expand-dialog #due-date").value;
+    const notesInput = document.querySelector(".expand-dialog #notes").value;
+    // const checklistInput = document.querySelector(".expand-dialog .checklist").value;
+    const priorityInput = +document.querySelector(".expand-dialog #priority").value;
+    if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
+      addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, [])
+      document.querySelector("dialog.expand-dialog").close();
+    }
+
+  });
+
+  document.querySelector(".expand-dialog .exit").addEventListener("click", evt => {
+    evt.preventDefault();
+    document.querySelector("dialog.expand-dialog").close();
+  });
+
   return { addItem, addProject, changeToProject };
 })()
 
 notesController.addProject("Cool")
 notesController.addProject("Bad")
 
-for (let i = 0; i < 13; ++i) {
+for (let i = 0; i < 4; ++i) {
   notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 1, ["apple", "orange"]);
 }
 
-for (let i = 0; i < 13; ++i) {
+for (let i = 0; i < 4; ++i) {
   notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 2);
 }
