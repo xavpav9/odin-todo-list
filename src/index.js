@@ -1,15 +1,12 @@
 import "./font-styles.css";
 import "./style.css";
 import Item from "./todo-item.js";
+import { cardsContainer, projectsContainer, createContainer } from "./containers.js"
 
 const screenController = (function() {
   const contentDiv = document.querySelector("div#content");
 
-  const cardsContainer = document.createElement("div");
-  cardsContainer.classList.add("cards-container");
-  const projectsContainer = document.createElement("div");
-  projectsContainer.classList.add("projects-container");
-
+  contentDiv.appendChild(createContainer);
   contentDiv.appendChild(cardsContainer);
   contentDiv.appendChild(projectsContainer);
 

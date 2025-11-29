@@ -17,9 +17,9 @@
 body {
   display: grid;
   height: 100vh;
+  max-height: 100vh;
   grid-template-columns: 1fr;
-  grid-template-rows: 4fr 36fr 3fr;
-
+  grid-template-rows: 80px 1fr 50px;
 }
 
 div.header {
@@ -28,21 +28,22 @@ div.header {
   align-items: center;
   padding: 10px;
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 
   background-image: linear-gradient(90deg, orange, 50%, red);
 }
 
 div#content {
   display: grid;
-  grid-template: 1fr / 3fr 1fr;
-  overflow: auto;
+  grid-template: 1fr / 160px 1fr 300px;
+  max-height: calc(100vh - 130px); /* 130 = header + footer */
 
   div.cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 20vw));
     grid-auto-rows: 200px;
     gap: 40px 20px;
+    overflow: auto;
 
     background-color: #ffffd0;
     padding: 20px;
@@ -60,21 +61,50 @@ div#content {
     flex-direction: column;
     gap: 2px;
     align-items: center;
-    padding: 20px 0px;
+    padding: 10px 0px;
     background-color: #8f008f;
+
+    h2 {
+      color: white;
+      margin-bottom: 10px;
+    }
 
     .project {
       appearance: none;
       cursor: pointer;
       background-color: antiquewhite;
       width: 90%;
-      height: 80px;
+      height: 60px;
       font-size: 1rem;
       border: 2px solid black;
 
       &.selected {
         background-color: #fad0c0;
       }
+    }
+  }
+
+  div.create-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    background-color: lightgreen;
+
+    svg {
+      width: 120px;
+      height: auto;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+    }
+
+    h4 {
+      text-align: center;
     }
   }
 }
@@ -92,6 +122,8 @@ div.footer {
   }
 
   svg {
+    position: relative;
+    top: 5px;
     stroke: white;
   }
 }
