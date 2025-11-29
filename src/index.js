@@ -14,7 +14,11 @@ const notesController = (function() {
     const item = new Item(title, description, date, priority, notes, projectNumber, checklist);
     projects[projectNumber].items.push(item);
     if (currentProject == projectNumber || currentProject == 0) {
-      screenController.displayDomForItem(item);
+      const card = screenController.displayDomForItem(item);
+      card.querySelector(".expand-btn").addEventListener("click", evt => {
+        screenController.fillExpandItemDialog(item);
+        document.querySelector("dialog.expand-dialog").showModal();
+      });
     }
   }
 
@@ -107,13 +111,7 @@ const notesController = (function() {
   document.querySelector(".expand-dialog .save").addEventListener("click", evt => {
     evt.preventDefault();
     const projectNumber = currentProject;
-    const titleInput = document.querySelector(".expand-dialog #title").value;
-    const descriptionInput = document.querySelector(".expand-dialog #description").value;
-    const dueDateInput = document.querySelector(".expand-dialog #due-date").value;
-    const notesInput = document.querySelector(".expand-dialog #notes").value;
-    const checklistInputs = [...document.querySelectorAll(".expand-dialog .checklist label")].map(node => [node.textContent, node.previousElementSibling.checked]);
-    console.log(checklistInputs);
-    const priorityInput = +document.querySelector(".expand-dialog #priority").value;
+    const { titleInput, descriptionInput, dueDateInput, notesInput, checklistInputs, priorityInput } = screenController.getExpandItemDialogValues();
     if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
       addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
       document.querySelector("dialog.expand-dialog").close();

@@ -49,6 +49,10 @@ const screenController = (function() {
     description.textContent = item.description;
     description.classList.add("description");
 
+    const expandBtn = document.createElement("button");
+    expandBtn.textContent = "Expand";
+    expandBtn.classList.add("expand-btn");
+
     const dueDate = document.createElement("p");
     dueDate.textContent = item.dueDate;
     dueDate.classList.add("due-date");
@@ -57,11 +61,7 @@ const screenController = (function() {
     priority.textContent = item.priority;
     priority.classList.add("priority");
 
-    const notes = document.createElement("p");
-    notes.textContent = item.notes;
-    notes.classList.add("notes");
-
-    [title, description, dueDate, priority, notes].forEach(part => {
+    [title, description, dueDate, expandBtn, priority].forEach(part => {
       card.appendChild(part)
     });
 
@@ -81,12 +81,15 @@ const screenController = (function() {
     });
   }
 
-  function addCheck(text) {
+  function addCheck(text, done=false) {
     const checklist = document.querySelector(".expand-dialog .checklist");
     const checkbox = document.createElement("input");
     const id = crypto.randomUUID();
     checkbox.setAttribute("type", "checkbox");
     checkbox.setAttribute("id", id);
+    if (done) {
+      checkbox.setAttribute("checked", "true");
+    }
 
     const label = document.createElement("label");
     label.setAttribute("for", id);
@@ -121,7 +124,32 @@ const screenController = (function() {
     document.querySelector(".expand-dialog #priority").value = "";
   }
 
-  return { displayDomForItem, displayDomForProject, refillCards, removeDomForProject, addCheck, clearExpandItemDialog }
+  function getExpandItemDialogValues() {
+    const titleInput = document.querySelector(".expand-dialog #title").value;
+    const descriptionInput = document.querySelector(".expand-dialog #description").value;
+    const dueDateInput = document.querySelector(".expand-dialog #due-date").value;
+    const notesInput = document.querySelector(".expand-dialog #notes").value;
+    const checklistInputs = [...document.querySelectorAll(".expand-dialog .checklist label")].map(node => [node.textContent, node.previousElementSibling.checked]);
+    console.log(checklistInputs);
+    const priorityInput = +document.querySelector(".expand-dialog #priority").value;
+
+    return { titleInput, descriptionInput, dueDateInput, notesInput, checklistInputs, priorityInput }
+  }
+
+  function fillExpandItemDialog(item) {
+    clearExpandItemDialog();
+    document.querySelector(".expand-dialog #title").value = item.title;
+    document.querySelector(".expand-dialog #description").value = item.description;
+    document.querySelector(".expand-dialog #due-date").value = item.dueDate;
+    document.querySelector(".expand-dialog #notes").value = item.notes;
+    document.querySelector(".expand-dialog #priority").value = item.priority;
+    
+    for (const check of item.checklist) {
+      addCheck(check.name, check.done);
+    }
+  }
+
+  return { displayDomForItem, displayDomForProject, refillCards, removeDomForProject, addCheck, clearExpandItemDialog, getExpandItemDialogValues, fillExpandItemDialog }
 })();
 
 export default screenController
