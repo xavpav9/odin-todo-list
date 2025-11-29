@@ -94,8 +94,8 @@ const notesController = (function() {
   const addProjectInput = document.querySelector("#add-project-input");
   const addProjectSubmitBtn = document.querySelector(".add-project-submit-btn");
 
-  function addItem(title, description, date, priority, notes, projectNumber) {
-    const item = new Item(title, description, date, priority, notes, projectNumber);
+  function addItem(title, description, date, priority, notes, projectNumber, checklist) {
+    const item = new Item(title, description, date, priority, notes, projectNumber, checklist);
     projects[projectNumber].items.push(item);
     if (currentProject == projectNumber || currentProject == 0) {
       screenController.displayDomForItem(item);
@@ -150,6 +150,10 @@ const notesController = (function() {
     addProjectInput.focus();
   });
 
+  document.querySelector(".create-container .add-item-btn").addEventListener("click", evt => {
+    document.querySelector("dialog.expand-dialog").showModal();
+  });
+
   addProjectInput.addEventListener("keydown", evt => {
     if (evt.key === "Enter") {
       evt.preventDefault();
@@ -158,7 +162,7 @@ const notesController = (function() {
   });
 
   document.querySelector(".add-project-submit-btn").addEventListener("click", evt => {
-    const text = addProjectInput.value;
+    const text = addProjectInput.value.trim();
     if (text.length > 0 && !projects.map(project => project.name.toUpperCase()).includes(text.toUpperCase())) {
       addProjectInput.style.display = "none";
       addProjectSubmitBtn.style.display = "none";
@@ -174,7 +178,7 @@ notesController.addProject("Cool")
 notesController.addProject("Bad")
 
 for (let i = 0; i < 13; ++i) {
-  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 1);
+  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 1, ["apple", "orange"]);
 }
 
 for (let i = 0; i < 13; ++i) {

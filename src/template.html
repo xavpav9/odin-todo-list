@@ -6,6 +6,27 @@
     <title>Todo List</title>
   </head>
   <body>
+    <dialog class="expand-dialog">
+      <form method="" action="">
+        <div class="left">
+          <label for="title">Title</label>
+          <input type="text" id="title">
+
+          <label for="description">Description</label>
+          <input type="text" id="description">
+
+          <label for="due-date">Due Date</label>
+          <input type="datetime-local" id="due-date">
+
+          <label for="notes">Notes</label>
+          <textarea id="notes" cols="50"></textarea>
+        </div>
+        <div class="right">
+          <button class="save">Save</button>
+          <button class="exit">Exit</button>
+        </div>
+      </form>
+    </dialog>
     <div class="header">
       <h1>Todo List</h1>
     </div>
