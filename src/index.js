@@ -70,6 +70,8 @@ const notesController = (function() {
   let currentProject = 0;
   const items = [];
   const projects = [];
+  const addProjectInput = document.querySelector("#add-project-input");
+  const addProjectSubmitBtn = document.querySelector(".add-project-submit-btn");
 
   function addItem(title, description, date, priority, notes, projectNumber) {
     const item = new Item(title, description, date, priority, notes, projectNumber);
@@ -93,6 +95,29 @@ const notesController = (function() {
   }
 
   addProject("Default");
+
+  document.querySelector(".create-container .add-project-btn").addEventListener("click", evt => {
+    addProjectInput.style.display = "block";
+    addProjectSubmitBtn.style.display = "block";
+    addProjectInput.focus();
+  });
+
+  addProjectInput.addEventListener("keydown", evt => {
+    if (evt.key === "Enter") {
+      evt.preventDefault();
+      addProjectSubmitBtn.dispatchEvent(new Event("click"));
+    }
+  });
+
+  document.querySelector(".add-project-submit-btn").addEventListener("click", evt => {
+    const text = addProjectInput.value;
+    if (text.length > 0 && !projects.map(project => project.name.toUpperCase()).includes(text.toUpperCase())) {
+      addProjectInput.style.display = "none";
+      addProjectSubmitBtn.style.display = "none";
+      addProjectInput.value = "";
+      addProject(text);
+    }
+  });
 
   return { addItem, addProject, changeToProject };
 })()
