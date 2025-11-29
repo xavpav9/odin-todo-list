@@ -267,11 +267,15 @@ dialog.expand-dialog {
 
     textarea, input:not([type="checkbox"]) {
       min-width: 100px;
-      border: thin dashed lightgrey;
+      border: thin dashed black;
       padding: 0px 5px;
 
       &:invalid {
-        outline: 2px solid red;
+        border: thin solid red;
+      }
+
+      &:focus {
+        outline: thin solid lightblue;
       }
     }
 
