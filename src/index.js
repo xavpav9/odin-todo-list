@@ -84,7 +84,37 @@ const screenController = (function() {
     });
   }
 
-  return { displayDomForItem, displayDomForProject, refillCards, removeDomForProject }
+  function addCheck(text) {
+    const checklist = document.querySelector(".expand-dialog .checklist");
+    const checkbox = document.createElement("input");
+    const id = crypto.randomUUID();
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", id);
+
+    const label = document.createElement("label");
+    label.setAttribute("for", id);
+    label.setAttribute("class", "check-label");
+    label.textContent = text;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.classList.add("remove-check-btn");
+    removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+
+    removeBtn.addEventListener("click", evt => {
+      evt.preventDefault();
+      removeBtn.previousElementSibling.remove();
+      removeBtn.previousElementSibling.remove();
+      removeBtn.remove();
+    });
+
+    checklist.appendChild(checkbox);
+    checklist.appendChild(label);
+    checklist.appendChild(removeBtn);
+
+    return removeBtn
+  }
+
+  return { displayDomForItem, displayDomForProject, refillCards, removeDomForProject, addCheck }
 })();
 
 const notesController = (function() {
@@ -100,6 +130,7 @@ const notesController = (function() {
     if (currentProject == projectNumber || currentProject == 0) {
       screenController.displayDomForItem(item);
     }
+    console.log(item);
   }
 
   function addProject(name, removable=true) {
@@ -179,8 +210,19 @@ const notesController = (function() {
   });
 
   document.querySelector(".expand-dialog .add-check-btn").addEventListener("click", evt => {
+    const text = document.querySelector(".expand-dialog #add-check").value.trim();
+    if (text.length > 0) {
+      screenController.addCheck(text);
+      document.querySelector(".expand-dialog #add-check").value = "";
+    }
     evt.preventDefault();
+  });
 
+  document.querySelector(".expand-dialog #add-check").addEventListener("keydown", evt => {
+    if (evt.key == "Enter") {
+      evt.preventDefault();
+      document.querySelector(".expand-dialog .add-check-btn").dispatchEvent(new Event("click"));
+    }
   });
 
   document.querySelector(".expand-dialog .save").addEventListener("click", evt => {
@@ -190,10 +232,11 @@ const notesController = (function() {
     const descriptionInput = document.querySelector(".expand-dialog #description").value;
     const dueDateInput = document.querySelector(".expand-dialog #due-date").value;
     const notesInput = document.querySelector(".expand-dialog #notes").value;
-    // const checklistInput = document.querySelector(".expand-dialog .checklist").value;
+    const checklistInputs = [...document.querySelectorAll(".expand-dialog .checklist label")].map(node => [node.textContent, node.previousElementSibling.checked]);
+    console.log(checklistInputs);
     const priorityInput = +document.querySelector(".expand-dialog #priority").value;
     if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
-      addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, [])
+      addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
       document.querySelector("dialog.expand-dialog").close();
     }
 
@@ -211,9 +254,9 @@ notesController.addProject("Cool")
 notesController.addProject("Bad")
 
 for (let i = 0; i < 4; ++i) {
-  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 1, ["apple", "orange"]);
+  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 1, [["apple", false], ["orange", true]]);
 }
 
 for (let i = 0; i < 4; ++i) {
-  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 2);
+  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 2, [["apple", false], ["orange", true]]);
 }

@@ -7,8 +7,8 @@ export default class {
     this.notes = notes;
     this.project = project;
     this.checklist = [];
-    for (const item in checklist) {
-      checklist.push({name: checklist, done: false})
+    for (const item of checklist) {
+      this.checklist.push({name: item[0], done: item[1]});
     }
   }
 }
