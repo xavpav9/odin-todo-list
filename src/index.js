@@ -10,13 +10,34 @@ const screenController = (function() {
   contentDiv.appendChild(cardsContainer);
   contentDiv.appendChild(projectsContainer);
 
-  function displayDomForProject(name, number) {
+  function displayDomForProject(name, number, removable) {
     const project = document.createElement("button");
+    const projectName = document.createElement("span");
     project.dataset.number = number;
-    project.textContent = name;
+    projectName.textContent = name;
     project.classList.add("project");
+
+    project.appendChild(projectName);
     projectsContainer.appendChild(project);
-    return project
+
+    if (removable) {
+      const removeBtn = document.createElement("button");
+      removeBtn.classList.add("remove-project-btn");
+      removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+      project.appendChild(removeBtn);
+      return [project, removeBtn];
+    }
+
+    return [project, null];
+  }
+
+  function removeDomForProject(projectNumber) {
+    for (const project of document.querySelectorAll(".project")) {
+      if (+project.dataset.number === projectNumber) {
+        project.remove();
+        return
+      }
+    }
   }
 
   function displayDomForItem(item) {
@@ -59,11 +80,11 @@ const screenController = (function() {
     }
     projectsContainer.querySelectorAll(".project").forEach(project => {
       project.classList.remove("selected");
-      if (project.dataset.number === projectNumber) project.classList.add("selected");
+      if (+project.dataset.number === projectNumber) project.classList.add("selected");
     });
   }
 
-  return { displayDomForItem, displayDomForProject, refillCards }
+  return { displayDomForItem, displayDomForProject, refillCards, removeDomForProject }
 })();
 
 const notesController = (function() {
@@ -81,16 +102,40 @@ const notesController = (function() {
     }
   }
 
-  function addProject(name) {
-    const project = screenController.displayDomForProject(name, projects.length);
+  function addProject(name, removable=true) {
+    const [project, removeBtn] = screenController.displayDomForProject(name, projects.length, removable);
     projects.push({name, items: []});
 
-    project.addEventListener("click", () => {changeToProject(project.dataset.number)});
+    project.addEventListener("click", evt => {
+      if (evt.target === project) {
+        changeToProject(+project.dataset.number)
+      }
+    });
+
+    if (removeBtn !== null) {
+      removeBtn.addEventListener("click", () => {
+        const projectNumber = +removeBtn.parentNode.dataset.number;
+        removeProject(projectNumber);
+      });
+    }
+
     if (projects.length === 1) project.dispatchEvent(new Event("click")); // for default project
   }
 
+  function removeProject(projectNumber) {
+    screenController.removeDomForProject(projectNumber);
+    projects.splice(projectNumber, 1);
+    if (currentProject === projectNumber || currentProject === 0) {
+      changeToProject(0);
+      currentProject = 0;
+    }
+    for (let i = 0; i < document.querySelectorAll(".project").length; ++i) {
+      document.querySelectorAll(".project")[i].dataset.number = i;
+    }
+  }
+
   function changeToProject(projectNumber) {
-    if (projectNumber == 0) {
+    if (projectNumber === 0) {
       screenController.refillCards(projectNumber, projects.reduce((acc, project) => acc.concat(project.items), []));
     } else {
       screenController.refillCards(projectNumber, projects[projectNumber].items);
@@ -98,7 +143,7 @@ const notesController = (function() {
     currentProject = projectNumber;
   }
 
-  addProject("All");
+  addProject("All", false);
 
   document.querySelector(".create-container .add-project-btn").addEventListener("click", evt => {
     addProjectInput.style.display = "block";

@@ -70,18 +70,33 @@ div#content {
     }
 
     .project {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
       word-wrap: break-word;
       appearance: none;
       cursor: pointer;
       background-color: antiquewhite;
       width: 90%;
-      padding: 5px;
+      padding: 5px 10px 5px 20px;
       height: 60px;
       font-size: 1rem;
       border: 2px solid black;
 
       &.selected {
         background-color: #fad0c0;
+        cursor: default;
+      }
+    }
+
+    .remove-project-btn {
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+
+      & > svg {
+        stroke: red;
       }
     }
   }
@@ -126,6 +141,11 @@ div#content {
     .add-project-submit-btn {
       cursor: pointer;
       background-color: #0f0;
+
+      & > svg {
+        height: 100%;
+        width: 100%;
+      }
     }
 
     svg {
