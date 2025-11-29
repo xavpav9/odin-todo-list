@@ -76,7 +76,7 @@ const notesController = (function() {
   function addItem(title, description, date, priority, notes, projectNumber) {
     const item = new Item(title, description, date, priority, notes, projectNumber);
     projects[projectNumber].items.push(item);
-    if (currentProject == projectNumber) {
+    if (currentProject == projectNumber || currentProject == 0) {
       screenController.displayDomForItem(item);
     }
   }
@@ -90,11 +90,15 @@ const notesController = (function() {
   }
 
   function changeToProject(projectNumber) {
-    screenController.refillCards(projectNumber, projects[projectNumber].items);
+    if (projectNumber == 0) {
+      screenController.refillCards(projectNumber, projects.reduce((acc, project) => acc.concat(project.items), []));
+    } else {
+      screenController.refillCards(projectNumber, projects[projectNumber].items);
+    }
     currentProject = projectNumber;
   }
 
-  addProject("Default");
+  addProject("All");
 
   document.querySelector(".create-container .add-project-btn").addEventListener("click", evt => {
     addProjectInput.style.display = "block";
@@ -127,4 +131,8 @@ notesController.addProject("Bad")
 
 for (let i = 0; i < 13; ++i) {
   notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 1);
+}
+
+for (let i = 0; i < 13; ++i) {
+  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 2);
 }
