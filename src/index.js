@@ -131,9 +131,9 @@ notesController.addProject("Cool")
 notesController.addProject("Bad")
 
 for (let i = 0; i < 4; ++i) {
-  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 1, [["apple", false], ["orange", true]]);
+  notesController.addItem("Eating", "I need to eat", "2025-11-12T19:25", "1", "I am just really hungry", 1, [["apple", false], ["orange", true]]);
 }
 
 for (let i = 0; i < 4; ++i) {
-  notesController.addItem("Eating", "I need to eat", "12th March", "1", "I am just really hungry", 2, [["apple", false], ["orange", true]]);
+  notesController.addItem("Eating", "I need to eat", "2025-11-12T19:35", "1", "I am just really hungry", 2, [["apple", false], ["orange", true]]);
 }

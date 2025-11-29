@@ -54,7 +54,9 @@ const screenController = (function() {
     expandBtn.classList.add("expand-btn");
 
     const dueDate = document.createElement("p");
-    dueDate.textContent = item.dueDate;
+    const date = new Date(Date.parse(item.dueDate))
+    const strDate = `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getFullYear()).slice(-2).padStart(2, "0")}  ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+    dueDate.textContent = strDate;
     dueDate.classList.add("due-date");
 
     const priority = document.createElement("p");
