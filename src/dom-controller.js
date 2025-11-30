@@ -73,6 +73,7 @@ function createScreenController() {
   function displayDomForItem(item) {
     const card = document.createElement("div");
     card.classList.add("card");
+    card.dataset.id = item.id;
 
     const title = document.createElement("h2");
     title.textContent = item.title;

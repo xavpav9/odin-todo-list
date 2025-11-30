@@ -74,6 +74,23 @@ const notesController = (function() {
       const priorityInput = +expandContainer.querySelector("#priority").value;
 
       if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
+        if (currentProject === 0) {
+          outer: for (let o = 0; o < projects.length; ++o) {
+            for (let i = 0; i < projects[o].items.length; ++i) {
+              if (projects[o].items[i].id === expandContainer.dataset.id) {
+                projects[o].items.splice(i, 1);
+                break outer;
+              }
+            }
+          }
+        } else {
+          for (let i = 0; i < projects[currentProject].items.length; ++i) {
+            if (projects[currentProject].items[i].id === expandContainer.dataset.id) {
+              projects[currentProject].items.splice(i, 1);
+              break;
+            }
+          }
+        }
         screenController.replaceWithCardContainer();
         addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
       }
@@ -96,6 +113,7 @@ const notesController = (function() {
         const expandContainer = screenController.replaceWithExpandContainer();
         addSaveNotesEvent(expandContainer);
         addExitEvent(expandContainer);
+        expandContainer.dataset.id = item.id;
         screenController.fillExpandContainer(item, expandContainer);
       });
     }
@@ -111,6 +129,7 @@ const notesController = (function() {
     const expandContainer = screenController.replaceWithExpandContainer();
     addSaveNotesEvent(expandContainer);
     addExitEvent(expandContainer);
+    expandContainer.dataset.id = "";
   });
 
   addProjectInput.addEventListener("keydown", evt => {

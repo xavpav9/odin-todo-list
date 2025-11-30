@@ -10,5 +10,6 @@ export default class {
     for (const item of checklist) {
       this.checklist.push({name: item[0], done: item[1]});
     }
+    this.id = crypto.randomUUID();
   }
 }
