@@ -12,13 +12,18 @@
 :root {
   font-family: "ZT-Nature", Arial, system-ui, sans-serif;
   font-weight: 600;
+
+  --project-container-width: 300px;
+  --create-container-width: 160px;
+  --header-height: 80px;
+  --footer-height: 50px;
 }
 
 body {
   display: grid;
   height: 100vh;
   grid-template-columns: 1fr;
-  grid-template-rows: 80px 1fr 50px;
+  grid-template-rows: var(--header-height) 1fr var(--footer-height);
 }
 
 button {
@@ -38,8 +43,8 @@ div.header {
 
 div#content {
   display: grid;
-  grid-template: 1fr / 160px 1fr 300px;
-  max-height: calc(100vh - 130px); /* 130 = header + footer */
+  grid-template: 1fr / var(--create-container-width) 1fr var(--project-container-width);
+  max-height: calc(100vh - var(--footer-height) - var(--header-height));
 
   div.cards-container {
     display: grid;
@@ -221,6 +226,10 @@ div#content {
 }
 
 .expand-container {
+  box-sizing: border-box;
+  background-color: #ffffd0;
+  padding: 8px;
+  width: calc(100vw - var(--project-container-width) - var(--create-container-width));
   margin: auto;
   overflow: auto;
 
@@ -229,9 +238,9 @@ div#content {
     grid-template-columns: 5fr 3fr;
     grid-template-rows: 1fr 9fr;
     gap: 30px 20px;
-    width: 60vw;
-    height: 70vh;
     padding: 20px;
+    border: 2px solid black;
+    background-color: white;
 
     .top {
       grid-column: 1 / 3;
