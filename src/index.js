@@ -66,17 +66,17 @@ const notesController = (function() {
     expandContainer.querySelector(".save").addEventListener("click", evt => {
       evt.preventDefault();
       const projectNumber = currentProject;
-      const titleInput = expandContainer.querySelector("#title").value;
-      const descriptionInput = expandContainer.querySelector("#description").value;
-      const dueDateInput = expandContainer.querySelector("#due-date").value;
-      const notesInput = expandContainer.querySelector("#notes").value;
+      const titleInput = expandContainer.querySelector("#title");
+      const descriptionInput = expandContainer.querySelector("#description");
+      const dueDateInput = expandContainer.querySelector("#due-date");
+      const notesInput = expandContainer.querySelector("#notes");
       const checklistInputs = [...expandContainer.querySelectorAll(".checklist label")].map(node => [node.textContent, node.previousElementSibling.checked]);
-      const priorityInput = +expandContainer.querySelector("#priority").value;
+      const priorityInput = expandContainer.querySelector("#priority");
 
-      if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
+      if (titleInput.checkValidity() && descriptionInput.checkValidity() && dueDateInput.checkValidity() && priorityInput.checkValidity()) {
         removeItemByID(expandContainer.dataset.id);
         screenController.replaceWithCardContainer();
-        addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
+        addItem(titleInput.value, descriptionInput.value, dueDateInput.value, +priorityInput.value, notesInput.value, projectNumber, checklistInputs)
       } else {
         const invalids = document.querySelectorAll(".expand-container *:invalid");
         console.log(invalids);
@@ -113,9 +113,7 @@ const notesController = (function() {
     for (let item of items) {
       const card = screenController.displayDomForItem(item);
       card.querySelector(".expand-btn").addEventListener("click", evt => {
-        const expandContainer = screenController.replaceWithExpandContainer();
-        addSaveNotesEvent(expandContainer);
-        addExitEvent(expandContainer);
+        const expandContainer = createExpandContainer();
         expandContainer.dataset.id = item.id;
         screenController.fillExpandContainer(item, expandContainer);
       });
@@ -127,6 +125,13 @@ const notesController = (function() {
     }
   }
 
+  function createExpandContainer() {
+    const expandContainer = screenController.replaceWithExpandContainer();
+    addSaveNotesEvent(expandContainer);
+    addExitEvent(expandContainer);
+    return expandContainer;
+  }
+
   document.querySelector(".create-container .add-project-btn").addEventListener("click", evt => {
     addProjectInput.style.display = "block";
     addProjectSubmitBtn.style.display = "block";
@@ -134,9 +139,7 @@ const notesController = (function() {
   });
 
   document.querySelector(".create-container .add-item-btn").addEventListener("click", evt => {
-    const expandContainer = screenController.replaceWithExpandContainer();
-    addSaveNotesEvent(expandContainer);
-    addExitEvent(expandContainer);
+    const expandContainer = createExpandContainer();
     expandContainer.dataset.id = "";
   });
 

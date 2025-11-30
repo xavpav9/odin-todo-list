@@ -324,13 +324,27 @@ div#content {
 
     .left {
       display: grid;
-      grid-template: 5fr 1fr 5fr 1fr / 1fr 6fr;
+      grid-template: 5fr 1fr 5fr 1fr / 1fr 4fr 2fr;
       align-items: start;
       gap: 20px 40px;
       
       textarea {
         align-self: stretch;
         resize: none;
+      }
+
+      input, textarea {
+        grid-column: span 2;
+      }
+
+      #due-date {
+        grid-column: span 1;
+      }
+
+      .time-until {
+        align-self: center;
+        color: #333;
+        font-size: 0.8rem;
       }
     }
 

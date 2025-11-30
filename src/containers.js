@@ -7,6 +7,7 @@ function createCardsContainer() {
 function createExpandContainer() {
   const expandContainer = document.createElement("div");
   expandContainer.classList.add("expand-container");
+  expandContainer.dataset.exists = "true";
 
   const form = document.createElement("form");
   const topDiv = document.createElement("div");
@@ -40,11 +41,43 @@ function createExpandContainer() {
   dueDateLabel.setAttribute("for", "due-date");
   dueDateLabel.textContent = "Due Date";
   const dueDateInput = document.createElement("input");
+  const now = new Date();
   dueDateInput.setAttribute("required", true);
   dueDateInput.setAttribute("type", "datetime-local");
   dueDateInput.setAttribute("id", "due-date");
+  dueDateInput.setAttribute("max",`${String(now.getFullYear() + 10).padStart(4, "0")}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}T00:00:00`);
+  dueDateInput.setAttribute("min",`${String(now.getFullYear() - 1).padStart(4, "0")}-${String(now.getMonth()).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}T00:00:00`);
+  const timeUntil = document.createElement("p");
+  timeUntil.classList.add("time-until");
+
+  function updateDateValue() {
+    setTimeout(() => {
+      if (dueDateInput.checkValidity()) {
+        const dateInput = new Date(Date.parse(dueDateInput.value));
+        const dateDiff = dateInput - Date.now();
+        const minutes = (dateDiff / (1000 * 60)) % 60;
+        const hours = (dateDiff / (1000 * 60 * 60)) % 24;
+        const days = dateDiff / (1000 * 60 * 60 * 24);
+        if (Math.abs(days) > 7) {
+          timeUntil.textContent = `${Math.round(days)}d`;
+        } else if (Math.floor(Math.abs(days)) === 0) {
+          timeUntil.textContent = `${hours < 0 ? -Math.floor(Math.abs(hours)) : Math.floor(hours)}h ${Math.round(minutes)}m`;
+        } else {
+          timeUntil.textContent = `${days < 0 ? -Math.floor(Math.abs(days)) : Math.floor(days)}d ${Math.round(hours)}h`;
+        }
+      } else {
+        timeUntil.textContent = "";
+      }
+
+      if (expandContainer.dataset.exists === "true") updateDateValue();
+    }, 500);
+  }
+
+  updateDateValue();
+
   leftDiv.appendChild(dueDateLabel);
   leftDiv.appendChild(dueDateInput);
+  leftDiv.appendChild(timeUntil);
 
   const notesLabel = document.createElement("label");
   notesLabel.setAttribute("for", "notes");

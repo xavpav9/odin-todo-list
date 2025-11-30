@@ -10,12 +10,14 @@ function createScreenController() {
   contentDiv.appendChild(projectsContainer);
 
   function replaceWithCardContainer() {
+    contentDiv.children[1].dataset.exists = "false";
     contentDiv.children[1].remove();
     const cardsContainer = createCardsContainer();
     contentDiv.insertBefore(cardsContainer, projectsContainer);
   }
 
   function replaceWithExpandContainer() {
+    contentDiv.children[1].dataset.exists = "false";
     contentDiv.children[1].remove();
     const expandContainer = createExpandContainer();
 
