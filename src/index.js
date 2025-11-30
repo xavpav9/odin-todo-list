@@ -78,13 +78,9 @@ const notesController = (function() {
         screenController.replaceWithCardContainer();
         addItem(titleInput.value, descriptionInput.value, dueDateInput.value, +priorityInput.value, notesInput.value, projectNumber, checklistInputs)
       } else {
-        const invalids = document.querySelectorAll(".expand-container *:invalid");
-        console.log(invalids);
-        if (invalids !== null) {
-          invalids.forEach(invalid => {
-            if (invalid.nodeName !== "FORM") invalid.classList.add("current-invalid");
-          });
-        }
+        [...document.querySelectorAll(".expand-container *:invalid")].forEach(invalid => {
+          if (invalid.nodeName !== "FORM") invalid.classList.add("current-invalid");
+        });
       }
     });
   }

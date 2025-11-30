@@ -10,14 +10,12 @@ function createScreenController() {
   contentDiv.appendChild(projectsContainer);
 
   function replaceWithCardContainer() {
-    contentDiv.children[1].dataset.exists = "false";
     contentDiv.children[1].remove();
     const cardsContainer = createCardsContainer();
     contentDiv.insertBefore(cardsContainer, projectsContainer);
   }
 
   function replaceWithExpandContainer() {
-    contentDiv.children[1].dataset.exists = "false";
     contentDiv.children[1].remove();
     const expandContainer = createExpandContainer();
 
@@ -98,6 +96,28 @@ function createScreenController() {
     const strDate = `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getFullYear()).slice(-2).padStart(2, "0")}  ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
     dueDate.textContent = strDate;
     dueDate.classList.add("due-date");
+
+    function checkDate(delay=20000) {
+      setTimeout(() => {
+        console.log(date);
+        const dateDiff = date - Date.now();
+
+        if (dateDiff < 0) {
+          dueDate.style.color = "red";
+          return
+        } else if (dateDiff < 1000 * 60 * 60 * 24) {
+          dueDate.style.color = "#f80";
+        } else {
+          dueDate.style.color = "green";
+        }
+
+        if ([...document.querySelectorAll(".card")].includes(card)) { 
+          checkDate();
+        }
+      }, delay);
+    }
+
+    checkDate(0);
 
     const priority = document.createElement("p");
     priority.textContent = item.priority;

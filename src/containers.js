@@ -7,7 +7,6 @@ function createCardsContainer() {
 function createExpandContainer() {
   const expandContainer = document.createElement("div");
   expandContainer.classList.add("expand-container");
-  expandContainer.dataset.exists = "true";
 
   const form = document.createElement("form");
   const topDiv = document.createElement("div");
@@ -69,7 +68,7 @@ function createExpandContainer() {
         timeUntil.textContent = "";
       }
 
-      if (expandContainer.dataset.exists === "true") updateDateValue();
+      if ([...document.querySelectorAll(".expand-container")].includes(expandContainer)) updateDateValue();
     }, 500);
   }
 
