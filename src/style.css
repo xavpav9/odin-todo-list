@@ -28,6 +28,19 @@ body {
 
 button {
   cursor: pointer;
+
+  &.save, &.exit, &.expand-btn, &.add-check-btn {
+    border: 2px solid black;
+    border-radius: 2px;
+    box-shadow: 1px 1px 1px lightgrey;
+    padding: 4px 8px;
+    transition: background-color 0.3s, transform 0.3s ease-out, box-shadow 0.3s;
+
+    &:hover {
+      transform: translate(-2px, -1px);
+      box-shadow: 3px 2px 1px lightgrey;
+    }
+  }
 }
 
 div.header {
@@ -68,6 +81,7 @@ div#content {
       background-color: white;
       border: 2px solid black;
       padding: 10px;
+      box-shadow: 1px 1px 2px grey;
 
       .title {
         grid-column: 1 / 3;
@@ -89,7 +103,10 @@ div#content {
         grid-row-end: span 2;
         grid-column-end: span 2;
         place-self: center;
-        padding: 4px 8px;
+
+        background-color: #ffa500;
+        &:hover { background-color: #ffb500; }
+        &:active { background-color: #ffc500; }
       }
 
       .due-date, .priority {
@@ -103,6 +120,11 @@ div#content {
         svg {
           cursor: pointer;
           stroke: red;
+          transition: stroke-width 0.2s;
+
+          &:hover {
+            stroke-width: 3;
+          }
         }
       }
 
@@ -125,6 +147,10 @@ div#content {
     background-color: #8f008f;
     overflow: auto;
 
+    & > * {
+      flex: 0 0 auto;
+    }
+
     h2 {
       color: white;
       margin-bottom: 10px;
@@ -138,16 +164,33 @@ div#content {
       word-wrap: break-word;
       appearance: none;
       cursor: pointer;
-      background-color: antiquewhite;
+      background-color: #faebd7;
       width: 90%;
       padding: 5px 10px 5px 20px;
       height: 60px;
       font-size: 1rem;
       border: 2px solid black;
 
+      box-shadow: 1px 1px 1px black;
+      transition: background-color 0.3s, transform 0.3s ease-out, box-shadow 0.3s;
+
+      &:hover {
+        background-color: #fafbe7;
+        transform: translate(-1px, -0.5px);
+        box-shadow: 2px 1.5px 1px black;
+      }
+
+      &:active { background-color: #fafbf7; }
+
       &.selected {
         background-color: #fad0c0;
         cursor: default;
+
+        &:hover {
+          background-color: #fad0c0;
+          transform: translate(0px, 0px);
+          box-shadow: 1px 1px 1px black;
+        }
       }
     }
 
@@ -157,6 +200,9 @@ div#content {
 
       & > svg {
         stroke: red;
+        transition: stroke-width 0.2s;
+
+        &:hover { stroke-width: 2.5; }
       }
     }
   }
@@ -200,10 +246,18 @@ div#content {
 
     .add-project-submit-btn {
       background-color: #0f0;
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #2e2;
+      }
 
       & > svg {
         height: 100%;
         width: 100%;
+
       }
     }
 
@@ -216,6 +270,15 @@ div#content {
       grid-column: 1 / 3;
       background-color: transparent;
       border: none;
+      
+      svg {
+        transition: stroke 0.2s, fill 0.2s;
+
+        &:hover {
+          stroke: #002;
+          fill: #eef;
+        }
+      }
     }
 
     h4 {
@@ -227,9 +290,14 @@ div#content {
 
 .expand-container {
   box-sizing: border-box;
+  display: grid;
+  place-content: center;
+  place-items: center;
+
   background-color: #ffffd0;
   padding: 8px;
   width: calc(100vw - var(--project-container-width) - var(--create-container-width));
+  height: calc(100vh - var(--footer-height) - var(--header-height));
   margin: auto;
   overflow: auto;
 
@@ -238,6 +306,7 @@ div#content {
     grid-template-columns: 5fr 3fr;
     grid-template-rows: 1fr 9fr;
     gap: 30px 20px;
+
     padding: 20px;
     border: 2px solid black;
     background-color: white;
@@ -267,8 +336,8 @@ div#content {
 
     .right {
       display: grid;
-      grid-template: 5fr 1fr / 1fr 1fr;
-      row-gap: 35px;
+      grid-template: 220px 1fr 1fr / 1fr 1fr;
+      row-gap: 15px;
       place-items: center;
 
       .checklist, .add-check-div {
@@ -278,12 +347,12 @@ div#content {
       .checklist {
         place-self: start;
         display: grid;
-        grid-template-columns: 1fr 4fr 1fr;
         align-items: center;
+        grid-template-columns: 1fr 4fr 1fr;
         gap: 10px 10px;
 
-        padding: 20px;
-        height: 200px;
+        padding: 0px 20px;
+        max-height: 220px;
         overflow-y: auto;
 
         label {
@@ -304,6 +373,9 @@ div#content {
 
           & > svg {
             stroke: red;
+            transition: stroke-width 0.2s;
+
+            &:hover { stroke-width: 2.5; }
           }
         }
       }
@@ -323,7 +395,22 @@ div#content {
           place-self: center;
           font-size: 0.6rem;
           padding: 0px 8px;
+          background-color: #90ee90;
+          &:hover { background-color: #a0eea0; }
+          &:active { background-color: #b0ffb0; }
         }
+      }
+
+      .save {
+        background-color: #90ee90;
+        &:hover { background-color: #a0eea0; }
+        &:active { background-color: #b0ffb0; }
+      }
+
+      .exit {
+        background-color: #ff0000;
+        &:hover { background-color: #ff3535; }
+        &:active { background-color: #ff4747; }
       }
     }
 
@@ -331,6 +418,7 @@ div#content {
       min-width: 100px;
       border: thin dashed black;
       padding: 0px 5px;
+      transition: background-color 0.1s;
 
       &:invalid {
         border: thin solid red;
@@ -338,6 +426,10 @@ div#content {
 
       &:focus {
         outline: thin solid lightblue;
+      }
+
+      &.current-invalid:invalid {
+        background-color: pink;
       }
     }
 

@@ -77,6 +77,14 @@ const notesController = (function() {
         removeItemByID(expandContainer.dataset.id);
         screenController.replaceWithCardContainer();
         addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
+      } else {
+        const invalids = document.querySelectorAll(".expand-container *:invalid");
+        console.log(invalids);
+        if (invalids !== null) {
+          invalids.forEach(invalid => {
+            if (invalid.nodeName !== "FORM") invalid.classList.add("current-invalid");
+          });
+        }
       }
     });
   }
@@ -148,9 +156,13 @@ const notesController = (function() {
     }
   });
 
-  document.querySelector(".add-project-submit-btn").addEventListener("click", evt => {
+  addProjectSubmitBtn.addEventListener("click", evt => {
     const text = addProjectInput.value.trim();
-    if (text.length > 0 && !projects.map(project => project.name.toUpperCase()).includes(text.toUpperCase())) {
+    if (text === "") {
+      addProjectInput.style.display = "none";
+      addProjectSubmitBtn.style.display = "none";
+      addProjectInput.value = "";
+    } else if (!projects.map(project => project.name.toUpperCase()).includes(text.toUpperCase())) {
       addProjectInput.style.display = "none";
       addProjectSubmitBtn.style.display = "none";
       addProjectInput.value = "";
