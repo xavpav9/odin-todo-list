@@ -450,11 +450,23 @@ div.footer {
   a, p {
     color: white;
     text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  a:hover {
+    color: black;
   }
 
   svg {
     position: relative;
     top: 5px;
     stroke: white;
+    fill: transparent;
+    transition: stroke 0.3s, fill 0.3s;
+
+    &:hover {
+      stroke: black;
+      fill: white;
+    }
   }
 }
