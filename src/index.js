@@ -74,27 +74,31 @@ const notesController = (function() {
       const priorityInput = +expandContainer.querySelector("#priority").value;
 
       if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
-        if (currentProject === 0) {
-          outer: for (let o = 0; o < projects.length; ++o) {
-            for (let i = 0; i < projects[o].items.length; ++i) {
-              if (projects[o].items[i].id === expandContainer.dataset.id) {
-                projects[o].items.splice(i, 1);
-                break outer;
-              }
-            }
-          }
-        } else {
-          for (let i = 0; i < projects[currentProject].items.length; ++i) {
-            if (projects[currentProject].items[i].id === expandContainer.dataset.id) {
-              projects[currentProject].items.splice(i, 1);
-              break;
-            }
-          }
-        }
+        removeItemByID(expandContainer.dataset.id);
         screenController.replaceWithCardContainer();
         addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
       }
     });
+  }
+
+  function removeItemByID(id) {
+    if (currentProject === 0) {
+      outer: for (let o = 0; o < projects.length; ++o) {
+        for (let i = 0; i < projects[o].items.length; ++i) {
+          if (projects[o].items[i].id === id) {
+            projects[o].items.splice(i, 1);
+            break outer;
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < projects[currentProject].items.length; ++i) {
+        if (projects[currentProject].items[i].id === id) {
+          projects[currentProject].items.splice(i, 1);
+          break;
+        }
+      }
+    }
   }
 
   function addExitEvent(expandContainer) {
@@ -115,6 +119,11 @@ const notesController = (function() {
         addExitEvent(expandContainer);
         expandContainer.dataset.id = item.id;
         screenController.fillExpandContainer(item, expandContainer);
+      });
+      card.querySelector(".cross svg").addEventListener("click", evt => {
+        const id = card.dataset.id;
+        removeItemByID(id);
+        changeToProject(currentProject);
       });
     }
   }
