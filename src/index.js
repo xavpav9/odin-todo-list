@@ -106,6 +106,7 @@ const notesController = (function() {
 
   function refillCards(projectNumber, items) {
     document.querySelector("#content").children[1].textContent = ""
+    items.sort((a, b) => a.priority - b.priority)
     for (let item of items) {
       const card = screenController.displayDomForItem(item);
       card.querySelector(".expand-btn").addEventListener("click", evt => {
