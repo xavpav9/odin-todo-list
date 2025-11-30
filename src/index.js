@@ -90,20 +90,11 @@ const notesController = (function() {
   }
 
   function removeItemByID(id) {
-    if (currentProject === 0) {
-      outer: for (let o = 0; o < projects.length; ++o) {
-        for (let i = 0; i < projects[o].items.length; ++i) {
-          if (projects[o].items[i].id === id) {
-            projects[o].items.splice(i, 1);
-            break outer;
-          }
-        }
-      }
-    } else {
-      for (let i = 0; i < projects[currentProject].items.length; ++i) {
-        if (projects[currentProject].items[i].id === id) {
-          projects[currentProject].items.splice(i, 1);
-          break;
+    outer: for (let o = 0; o < projects.length; ++o) {
+      for (let i = 0; i < projects[o].items.length; ++i) {
+        if (projects[o].items[i].id === id) {
+          projects[o].items.splice(i, 1);
+          break outer;
         }
       }
     }
