@@ -1,11 +1,44 @@
-import { cardsContainer, projectsContainer, createContainer } from "./containers.js";
+import { createCardsContainer, createProjectsContainer, createCreateContainer, createExpandContainer } from "./containers.js";
 
-const screenController = (function() {
+function createScreenController() {
   const contentDiv = document.querySelector("div#content");
+  const projectsContainer = createProjectsContainer();
+  const createContainer = createCreateContainer();
 
   contentDiv.appendChild(createContainer);
-  contentDiv.appendChild(cardsContainer);
+  contentDiv.appendChild(createCardsContainer());
   contentDiv.appendChild(projectsContainer);
+
+  function replaceWithCardContainer() {
+    contentDiv.children[1].remove();
+    const cardsContainer = createCardsContainer();
+    contentDiv.insertBefore(cardsContainer, projectsContainer);
+  }
+
+  function replaceWithExpandContainer() {
+    contentDiv.children[1].remove();
+    const expandContainer = createExpandContainer();
+
+    expandContainer.querySelector(".add-check-btn").addEventListener("click", evt => {
+      const text = expandContainer.querySelector("#add-check").value.trim();
+      if (text.length > 0) {
+        addCheck(text);
+        expandContainer.querySelector("#add-check").value = "";
+      }
+      evt.preventDefault();
+    });
+
+    expandContainer.querySelector("#add-check").addEventListener("keydown", evt => {
+      if (evt.key == "Enter") {
+        evt.preventDefault();
+        expandContainer.querySelector(".add-check-btn").dispatchEvent(new Event("click"));
+      }
+    });
+
+    contentDiv.insertBefore(expandContainer, projectsContainer);
+
+    return expandContainer;
+  }
 
   function displayDomForProject(name, number, removable) {
     const project = document.createElement("button");
@@ -67,16 +100,12 @@ const screenController = (function() {
       card.appendChild(part)
     });
 
-    cardsContainer.appendChild(card);
+    contentDiv.children[1].appendChild(card);
 
     return card
   }
 
-  function refillCards(projectNumber, cards) {
-    cardsContainer.textContent = ""
-    for (let card of cards) {
-      displayDomForItem(card);
-    }
+  function changeDomSelectedProject(projectNumber) {
     projectsContainer.querySelectorAll(".project").forEach(project => {
       project.classList.remove("selected");
       if (+project.dataset.number === projectNumber) project.classList.add("selected");
@@ -84,7 +113,7 @@ const screenController = (function() {
   }
 
   function addCheck(text, done=false) {
-    const checklist = document.querySelector(".expand-dialog .checklist");
+    const checklist = document.querySelector(".expand-container .checklist");
     const checkbox = document.createElement("input");
     const id = crypto.randomUUID();
     checkbox.setAttribute("type", "checkbox");
@@ -116,42 +145,19 @@ const screenController = (function() {
     return removeBtn
   }
 
-  function clearExpandItemDialog() {
-    document.querySelector(".expand-dialog #title").value = "";
-    document.querySelector(".expand-dialog #description").value = "";
-    document.querySelector(".expand-dialog #due-date").value = "";
-    document.querySelector(".expand-dialog #notes").value = "";
-    document.querySelector(".expand-dialog .checklist").textContent = "";
-    document.querySelector(".expand-dialog #add-check").value = "";
-    document.querySelector(".expand-dialog #priority").value = "";
-  }
-
-  function getExpandItemDialogValues() {
-    const titleInput = document.querySelector(".expand-dialog #title").value;
-    const descriptionInput = document.querySelector(".expand-dialog #description").value;
-    const dueDateInput = document.querySelector(".expand-dialog #due-date").value;
-    const notesInput = document.querySelector(".expand-dialog #notes").value;
-    const checklistInputs = [...document.querySelectorAll(".expand-dialog .checklist label")].map(node => [node.textContent, node.previousElementSibling.checked]);
-    console.log(checklistInputs);
-    const priorityInput = +document.querySelector(".expand-dialog #priority").value;
-
-    return { titleInput, descriptionInput, dueDateInput, notesInput, checklistInputs, priorityInput }
-  }
-
-  function fillExpandItemDialog(item) {
-    clearExpandItemDialog();
-    document.querySelector(".expand-dialog #title").value = item.title;
-    document.querySelector(".expand-dialog #description").value = item.description;
-    document.querySelector(".expand-dialog #due-date").value = item.dueDate;
-    document.querySelector(".expand-dialog #notes").value = item.notes;
-    document.querySelector(".expand-dialog #priority").value = item.priority;
+  function fillExpandContainer(item, expandContainer) {
+    expandContainer.querySelector("#title").value = item.title;
+    expandContainer.querySelector("#description").value = item.description;
+    expandContainer.querySelector("#due-date").value = item.dueDate;
+    expandContainer.querySelector("#notes").value = item.notes;
+    expandContainer.querySelector("#priority").value = item.priority;
     
     for (const check of item.checklist) {
       addCheck(check.name, check.done);
     }
   }
 
-  return { displayDomForItem, displayDomForProject, refillCards, removeDomForProject, addCheck, clearExpandItemDialog, getExpandItemDialogValues, fillExpandItemDialog }
-})();
+  return { displayDomForItem, displayDomForProject, removeDomForProject, addCheck, replaceWithExpandContainer, fillExpandContainer, replaceWithCardContainer, changeDomSelectedProject }
+};
 
-export default screenController
+export default createScreenController

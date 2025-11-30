@@ -21,6 +21,10 @@ body {
   grid-template-rows: 80px 1fr 50px;
 }
 
+button {
+  cursor: pointer;
+}
+
 div.header {
   display: flex;
   justify-content: center;
@@ -73,7 +77,6 @@ div#content {
       }
 
       .expand-btn {
-        cursor: pointer;
         grid-row-end: span 2;
         place-self: center;
         padding: 4px 8px;
@@ -130,7 +133,6 @@ div#content {
     }
 
     .remove-project-btn {
-      cursor: pointer;
       background-color: transparent;
       border: none;
 
@@ -178,7 +180,6 @@ div#content {
     }
 
     .add-project-submit-btn {
-      cursor: pointer;
       background-color: #0f0;
 
       & > svg {
@@ -194,7 +195,6 @@ div#content {
 
     .add-project-btn, .add-item-btn {
       grid-column: 1 / 3;
-      cursor: pointer;
       background-color: transparent;
       border: none;
     }
@@ -206,8 +206,9 @@ div#content {
   }
 }
 
-dialog.expand-dialog {
+.expand-container {
   margin: auto;
+  overflow: auto;
 
   form {
     display: grid;
@@ -243,7 +244,7 @@ dialog.expand-dialog {
 
     .right {
       display: grid;
-      grid-template: 10fr 2fr / 1fr 1fr;
+      grid-template: 5fr 1fr / 1fr 1fr;
       row-gap: 35px;
       place-items: center;
 
@@ -258,8 +259,8 @@ dialog.expand-dialog {
         align-items: center;
         gap: 10px 10px;
 
-        max-height: 190px;
         padding: 20px;
+        height: 200px;
         overflow-y: auto;
 
         label {
@@ -269,12 +270,12 @@ dialog.expand-dialog {
         }
 
         input {
+          cursor: pointer;
           width: 20px;
           height: 20px;
         }
 
         .remove-check-btn {
-          cursor: pointer;
           background-color: transparent;
           border: none;
 

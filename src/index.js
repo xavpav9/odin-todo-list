@@ -1,7 +1,9 @@
 import "./font-styles.css";
 import "./style.css";
 import Item from "./todo-item.js";
-import screenController from "./dom-controller";
+import createScreenController from "./dom-controller";
+
+const screenController = createScreenController();
 
 const notesController = (function() {
   let currentProject = 0;
@@ -13,13 +15,7 @@ const notesController = (function() {
   function addItem(title, description, date, priority, notes, projectNumber, checklist) {
     const item = new Item(title, description, date, priority, notes, projectNumber, checklist);
     projects[projectNumber].items.push(item);
-    if (currentProject == projectNumber || currentProject == 0) {
-      const card = screenController.displayDomForItem(item);
-      card.querySelector(".expand-btn").addEventListener("click", evt => {
-        screenController.fillExpandItemDialog(item);
-        document.querySelector("dialog.expand-dialog").showModal();
-      });
-    }
+    changeToProject(projectNumber);
   }
 
   function addProject(name, removable=true) {
@@ -54,15 +50,56 @@ const notesController = (function() {
   }
 
   function changeToProject(projectNumber) {
-    if (projectNumber === 0) {
-      screenController.refillCards(projectNumber, projects.reduce((acc, project) => acc.concat(project.items), []));
-    } else {
-      screenController.refillCards(projectNumber, projects[projectNumber].items);
+    if (document.querySelector(".cards-container") !== null) {
+      if (projectNumber === 0) {
+        refillCards(projectNumber, projects.reduce((acc, project) => acc.concat(project.items), []));
+      } else {
+        refillCards(projectNumber, projects[projectNumber].items);
+      }
     }
+    screenController.changeDomSelectedProject(projectNumber);
     currentProject = projectNumber;
   }
 
-  addProject("All", false);
+
+  function addSaveNotesEvent(expandContainer) {
+    expandContainer.querySelector(".save").addEventListener("click", evt => {
+      evt.preventDefault();
+      const projectNumber = currentProject;
+      const titleInput = expandContainer.querySelector("#title").value;
+      const descriptionInput = expandContainer.querySelector("#description").value;
+      const dueDateInput = expandContainer.querySelector("#due-date").value;
+      const notesInput = expandContainer.querySelector("#notes").value;
+      const checklistInputs = [...expandContainer.querySelectorAll(".checklist label")].map(node => [node.textContent, node.previousElementSibling.checked]);
+      const priorityInput = +expandContainer.querySelector("#priority").value;
+
+      if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
+        screenController.replaceWithCardContainer();
+        addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
+      }
+    });
+  }
+
+  function addExitEvent(expandContainer) {
+    expandContainer.querySelector(".exit").addEventListener("click", evt => {
+      evt.preventDefault();
+      screenController.replaceWithCardContainer();
+      changeToProject(currentProject);
+    });
+  }
+
+  function refillCards(projectNumber, items) {
+    document.querySelector("#content").children[1].textContent = ""
+    for (let item of items) {
+      const card = screenController.displayDomForItem(item);
+      card.querySelector(".expand-btn").addEventListener("click", evt => {
+        const expandContainer = screenController.replaceWithExpandContainer();
+        addSaveNotesEvent(expandContainer);
+        addExitEvent(expandContainer);
+        screenController.fillExpandContainer(item, expandContainer);
+      });
+    }
+  }
 
   document.querySelector(".create-container .add-project-btn").addEventListener("click", evt => {
     addProjectInput.style.display = "block";
@@ -71,8 +108,9 @@ const notesController = (function() {
   });
 
   document.querySelector(".create-container .add-item-btn").addEventListener("click", evt => {
-    screenController.clearExpandItemDialog();
-    document.querySelector("dialog.expand-dialog").showModal();
+    const expandContainer = screenController.replaceWithExpandContainer();
+    addSaveNotesEvent(expandContainer);
+    addExitEvent(expandContainer);
   });
 
   addProjectInput.addEventListener("keydown", evt => {
@@ -92,37 +130,8 @@ const notesController = (function() {
     }
   });
 
-  document.querySelector(".expand-dialog .add-check-btn").addEventListener("click", evt => {
-    const text = document.querySelector(".expand-dialog #add-check").value.trim();
-    if (text.length > 0) {
-      screenController.addCheck(text);
-      document.querySelector(".expand-dialog #add-check").value = "";
-    }
-    evt.preventDefault();
-  });
-
-  document.querySelector(".expand-dialog #add-check").addEventListener("keydown", evt => {
-    if (evt.key == "Enter") {
-      evt.preventDefault();
-      document.querySelector(".expand-dialog .add-check-btn").dispatchEvent(new Event("click"));
-    }
-  });
-
-  document.querySelector(".expand-dialog .save").addEventListener("click", evt => {
-    evt.preventDefault();
-    const projectNumber = currentProject;
-    const { titleInput, descriptionInput, dueDateInput, notesInput, checklistInputs, priorityInput } = screenController.getExpandItemDialogValues();
-    if (titleInput.length > 0 && descriptionInput.length > 0 && dueDateInput !== "" && priorityInput > 0) {
-      addItem(titleInput, descriptionInput, dueDateInput, priorityInput, notesInput, projectNumber, checklistInputs)
-      document.querySelector("dialog.expand-dialog").close();
-    }
-
-  });
-
-  document.querySelector(".expand-dialog .exit").addEventListener("click", evt => {
-    evt.preventDefault();
-    document.querySelector("dialog.expand-dialog").close();
-  });
+  addProject("All", false);
+  addProject("Default");
 
   return { addItem, addProject, changeToProject };
 })()
@@ -137,3 +146,5 @@ for (let i = 0; i < 4; ++i) {
 for (let i = 0; i < 4; ++i) {
   notesController.addItem("Eating", "I need to eat", "2025-11-12T19:35", "1", "I am just really hungry", 2, [["apple", false], ["orange", true]]);
 }
+
+notesController.changeToProject(1);
