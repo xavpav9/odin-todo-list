@@ -21,7 +21,7 @@ function createExpandContainer() {
   titleLabel.textContent = "Title";
   const titleInput = document.createElement("input");
   titleInput.setAttribute("required", true);
-  titleInput.setAttribute("maxlength", "32");
+  titleInput.setAttribute("maxlength", "48");
   titleInput.setAttribute("type", "text");
   titleInput.setAttribute("id", "title");
   topDiv.appendChild(titleLabel);

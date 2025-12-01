@@ -99,7 +99,6 @@ function createScreenController() {
 
     function checkDate(delay=20000) {
       setTimeout(() => {
-        console.log(date);
         const dateDiff = date - Date.now();
 
         if (dateDiff < 0) {

@@ -15,15 +15,39 @@ const notesController = (function() {
   function addItem(title, description, date, priority, notes, projectNumber, checklist) {
     const item = new Item(title, description, date, priority, notes, projectNumber, checklist);
     projects[projectNumber].items.push(item);
+    updateLocalStorage();
     changeToProject(projectNumber);
   }
 
-  function addProject(name, removable=true) {
-    const [project, removeBtn] = screenController.displayDomForProject(name, projects.length, removable);
-    projects.push({name, items: []});
+  function updateLocalStorage() {
+    localStorage.removeItem("projects");
+    localStorage.setItem("projects", JSON.stringify(projects));
+  }
 
-    project.addEventListener("click", evt => {
-      changeToProject(+project.dataset.number)
+  function getFromLocalStorage() {
+    const projectsFromLS = JSON.parse(localStorage.getItem("projects"));
+    const currentProjectFromLS = localStorage.getItem("currentProject");
+    console.log(projectsFromLS);
+    if (projectsFromLS === null) {
+      return false;
+    } else {
+      for (const project of projectsFromLS) {
+        const newProject = addProject(project.name, project.removable);
+        newProject.items = project.items;
+      }
+    }
+
+    changeToProject(currentProjectFromLS === null ? 0 : +currentProjectFromLS);
+    return true;
+  }
+
+  function addProject(name, removable=true) {
+    const [projectDom, removeBtn] = screenController.displayDomForProject(name, projects.length, removable);
+    const project = {name, items: [], removable};
+    projects.push(project);
+
+    projectDom.addEventListener("click", evt => {
+      changeToProject(+projectDom.dataset.number)
     });
 
     if (removeBtn !== null) {
@@ -34,7 +58,8 @@ const notesController = (function() {
       });
     }
 
-    if (projects.length === 1) project.dispatchEvent(new Event("click")); // for default project
+    updateLocalStorage();
+    return project
   }
 
   function removeProject(projectNumber) {
@@ -47,6 +72,7 @@ const notesController = (function() {
     for (let i = 0; i < document.querySelectorAll(".project").length; ++i) {
       document.querySelectorAll(".project")[i].dataset.number = i;
     }
+    updateLocalStorage();
   }
 
   function changeToProject(projectNumber) {
@@ -59,6 +85,7 @@ const notesController = (function() {
     }
     screenController.changeDomSelectedProject(projectNumber);
     currentProject = projectNumber;
+    localStorage.setItem("currentProject", currentProject);
   }
 
 
@@ -94,6 +121,7 @@ const notesController = (function() {
         }
       }
     }
+    updateLocalStorage();
   }
 
   function addExitEvent(expandContainer) {
@@ -161,21 +189,11 @@ const notesController = (function() {
     }
   });
 
-  addProject("All", false);
-  addProject("Default");
+  if (!getFromLocalStorage()) {
+    addProject("All", false);
+    addProject("Default");
+    changeToProject(1);
+  }
 
   return { addItem, addProject, changeToProject };
 })()
-
-notesController.addProject("Cool")
-notesController.addProject("Bad")
-
-for (let i = 0; i < 4; ++i) {
-  notesController.addItem("Eating", "I need to eat", "2025-11-12T19:25", "1", "I am just really hungry", 1, [["apple", false], ["orange", true]]);
-}
-
-for (let i = 0; i < 4; ++i) {
-  notesController.addItem("Eating", "I need to eat", "2025-11-12T19:35", "1", "I am just really hungry", 2, [["apple", false], ["orange", true]]);
-}
-
-notesController.changeToProject(1);
