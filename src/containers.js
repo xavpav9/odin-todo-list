@@ -157,6 +157,7 @@ function createCreateContainer() {
   addItemDiv.appendChild(addItemHeader);
   addItemDiv.appendChild(addItemBtn);
 
+  const addProjectInputDiv = document.createElement("div");
   const addProjectDiv = document.createElement("div");
   const addProjectBtn = document.createElement("button");
   const addProjectHeader = document.createElement("h4");
@@ -172,14 +173,16 @@ function createCreateContainer() {
   addProjectSubmitBtn.classList.add("add-project-submit-btn");
   addProjectSubmitBtn.innerHTML = ' <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg> ';
   addProjectDiv.classList.add("add-project");
+  addProjectInputDiv.classList.add("add-project-input-container");
   addProjectDiv.appendChild(addProjectHeader);
   addProjectDiv.appendChild(addProjectBtn);
-  addProjectDiv.appendChild(addProjectInput);
-  addProjectDiv.appendChild(addProjectSubmitBtn);
+  addProjectInputDiv.appendChild(addProjectInput);
+  addProjectInputDiv.appendChild(addProjectSubmitBtn);
 
   createContainer.classList.add("create-container");
   createContainer.appendChild(addItemDiv);
   createContainer.appendChild(addProjectDiv);
+  createContainer.appendChild(addProjectInputDiv);
 
   return createContainer;
 }
