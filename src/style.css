@@ -47,11 +47,19 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 20px;
+
   padding: 10px;
   font-weight: 700;
   font-size: 1.4rem;
 
   background-image: linear-gradient(90deg, orange, 50%, red);
+
+  img {
+    image-rendering: pixelated;
+    width: 4rem;
+    height: auto;
+  }
 }
 
 div#content {

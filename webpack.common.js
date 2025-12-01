@@ -10,7 +10,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/template.html",
+      template: "./src/template.html",
+      favicon: "./src/images/favicon.png",
     }),
   ],
   module: {
@@ -20,7 +21,11 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.svg$/i,
+        test: /\.html$/i,
+        loader: "html-loader",
+      },
+      {
+        test: /\.(svg|png)$/i,
         type: "asset/resource",
       },
     ],

@@ -27,7 +27,6 @@ const notesController = (function() {
   function getFromLocalStorage() {
     const projectsFromLS = JSON.parse(localStorage.getItem("projects"));
     const currentProjectFromLS = localStorage.getItem("currentProject");
-    console.log(projectsFromLS);
     if (projectsFromLS === null) {
       return false;
     } else {
