@@ -231,6 +231,7 @@ div#content {
   }
 
   .create-container {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
