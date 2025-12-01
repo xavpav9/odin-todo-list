@@ -134,7 +134,12 @@ const notesController = (function() {
 
   function refillCards(projectNumber, items) {
     document.querySelector("#content").children[1].textContent = ""
-    items.sort((a, b) => a.priority - b.priority)
+    items.sort((a, b) => {
+      const diff = a.priority - b.priority
+      if (diff !== 0) return diff;
+      else return +Date.parse(a.dueDate) - +Date.parse(b.dueDate);
+    });
+
     for (let item of items) {
       const card = screenController.displayDomForItem(item);
       card.querySelector(".expand-btn").addEventListener("click", evt => {
