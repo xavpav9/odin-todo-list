@@ -1,3 +1,5 @@
+import dropDownImg from "./images/drop-down.svg";
+
 function createCardsContainer() {
   const cardsContainer = document.createElement("div");
   cardsContainer.classList.add("cards-container");
@@ -98,7 +100,11 @@ function createExpandContainer() {
   leftDiv.appendChild(priorityInput);
 
   const checklistDiv = document.createElement("div");
+  const checklistLabel = document.createElement("label");
+  checklistLabel.textContent = "Checklist";
   checklistDiv.classList.add("checklist");
+  checklistLabel.classList.add("checklist-label");
+  rightDiv.appendChild(checklistLabel);
   rightDiv.appendChild(checklistDiv);
 
   const addCheckDiv = document.createElement("div");
@@ -137,9 +143,20 @@ function createExpandContainer() {
 function createProjectsContainer() {
   const projectsContainer = document.createElement("div");
   const projectsHeader = document.createElement("h2");
+  const projectDropDown = document.createElement("img");
+  projectDropDown.alt="drop down arrow";
+  projectDropDown.src = dropDownImg;
+  projectDropDown.classList.add("drop-down-arrow");
+  let rotation = 0;
+  projectDropDown.addEventListener("click", evt => {
+    rotation += 180;
+    projectDropDown.style.transform = `rotate(${rotation}deg)`;
+    projectsContainer.classList.toggle("hidden");
+  });
   projectsHeader.textContent = "Projects";
   projectsContainer.classList.add("projects-container");
-  projectsContainer.appendChild(projectsHeader)
+  projectsContainer.appendChild(projectsHeader);
+  projectsContainer.appendChild(projectDropDown);
 
   return projectsContainer;
 }

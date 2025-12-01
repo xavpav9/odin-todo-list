@@ -147,6 +147,7 @@ div#content {
     padding: 10px 0px;
     background-color: #8f008f;
     overflow: auto;
+    scrollbar-color: lightgreen transparent;
 
     & > * {
       flex: 0 0 auto;
@@ -155,6 +156,10 @@ div#content {
     h2 {
       color: white;
       margin-bottom: 10px;
+    }
+
+    .drop-down-arrow {
+      display: none;
     }
 
     .project {
@@ -236,6 +241,7 @@ div#content {
       display: grid;
       grid-template-columns: 4fr 1fr;
       max-height: 3rem;
+      place-content: center;
 
       #add-project-input, .add-project-submit-btn {
         box-sizing: border-box;
@@ -248,7 +254,7 @@ div#content {
       }
 
       #add-project-input {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         border-right: none;
         border-top-left-radius: 2px;
         border-bottom-left-radius: 2px;
@@ -331,6 +337,7 @@ div#content {
     max-width: calc(100vw - var(--project-container-width) - var(--create-container-width) - 100px);
 
     overflow: auto;
+    scrollbar-color: lightgreen transparent;
 
     .top {
       grid-column: 1 / 3;
@@ -371,12 +378,16 @@ div#content {
 
     .right {
       display: grid;
-      grid-template: 300px 1fr 1fr / 1fr 1fr;
+      grid-template: 20px 300px 1fr 1fr / 1fr 1fr;
       row-gap: 15px;
       place-items: center;
 
-      .checklist, .add-check-div {
+      .checklist, .add-check-div, .checklist-label {
         grid-column: 1 / 3;
+      }
+
+      .checklist-label {
+        place-self: center start;
       }
 
       .checklist {
@@ -390,11 +401,13 @@ div#content {
         max-height: 100%;
         width: 100%;
         overflow-y: auto;
+        scrollbar-color: purple transparent;
+        scrollbar-width: thin;
 
         label {
           overflow: hidden;
           word-wrap: break-word;
-          font-size: 0.8rem;
+          font-size: 0.9rem;
         }
 
         input {
@@ -564,11 +577,12 @@ div#content {
       display: grid;
       grid-template: 3fr 1fr / 1fr 1fr;
       place-items: center;
+      place-content: center;
 
       width: var(--project-container-width);
       
       padding: 15px 10px;
-      border-top: 8px solid black;
+      border-top: 3px solid blue;
 
       .add-project-input-container {
         grid-column: 1 / 3;
@@ -578,6 +592,7 @@ div#content {
         display: grid;
         grid-template: 1fr 4fr / 4fr;
         place-items: center;
+        place-content: center;
       }
 
       svg {
@@ -640,6 +655,15 @@ div#content {
             grid-column: 1 / 3;
           }
         }
+
+        .top {
+          grid-template-columns: 1fr;
+          row-gap: 20px;
+
+          label {
+            grid-column: 1 / 3;
+          }
+        }
       }
     }
 
@@ -649,18 +673,45 @@ div#content {
       padding: 50px 0px;
       grid-auto-rows: 200px;
       height: auto;
+
+      .card {
+        width: 80vw;
+      }
     }
 
     .create-container {
       order: 2;
+      padding: 40px 10px 20px;
+      border: none;
+
+      svg {
+        width: 20vw;
+      }
     }
 
     .projects-container {
       padding: 20px 0px;
       order: 1;
+      max-height: 500px;
+      transition: max-height 0.4s;
 
       .project {
-        aspect-ratio: 8;
+        aspect-ratio: 6;
+      }
+
+      &.hidden {
+        max-height: 70px;
+        overflow: hidden;
+      }
+
+      .drop-down-arrow {
+        cursor: pointer;
+        transition: transform 0.2s;
+        transform: rotate(0deg);
+        margin: 8px 0px 30px;
+        display: block;
+        width: 40px;
+        height: auto;
       }
     }
   }
