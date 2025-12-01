@@ -13,10 +13,10 @@
   font-family: "ZT-Nature", Arial, system-ui, sans-serif;
   font-weight: 600;
 
-  --project-container-width: 300px;
-  --create-container-width: 160px;
-  --header-height: 80px;
-  --footer-height: 50px;
+  --project-container-width: max(350px, 25vw);
+  --create-container-width: max(200px, 12vw);
+  --header-height: 5rem;
+  --footer-height: 3rem;
 }
 
 body {
@@ -167,16 +167,16 @@ div#content {
       cursor: pointer;
       background-color: #faebd7;
       width: 90%;
+      aspect-ratio: 4;
       padding: 5px 10px 5px 20px;
-      height: 60px;
-      font-size: 1rem;
+      font-size: 2rem;
       border: 2px solid black;
 
       span {
         word-wrap: break-word;
         text-align: left;
         overflow: hidden;
-        font-size: 0.9rem;
+        font-size: 1rem;
       }
 
       box-shadow: 1px 1px 1px black;
@@ -207,6 +207,8 @@ div#content {
       border: none;
 
       & > svg {
+        height: 2rem;
+        width: auto;
         stroke: red;
         transition: stroke-width 0.2s;
 
@@ -265,12 +267,11 @@ div#content {
       & > svg {
         height: 100%;
         width: 100%;
-
       }
     }
 
     svg {
-      width: 120px;
+      width: 150px;
       height: auto;
     }
 
@@ -307,7 +308,8 @@ div#content {
   width: calc(100vw - var(--project-container-width) - var(--create-container-width));
   height: calc(100vh - var(--footer-height) - var(--header-height));
   margin: auto;
-  overflow: auto;
+
+  max-height: 100%;
 
   form {
     display: grid;
@@ -318,6 +320,11 @@ div#content {
     padding: 20px;
     border: 2px solid black;
     background-color: white;
+
+    max-height: calc(100vh - var(--footer-height) - var(--header-height) - 100px);
+    max-width: calc(100vw - var(--project-container-width) - var(--create-container-width) - 100px);
+
+    overflow: auto;
 
     .top {
       grid-column: 1 / 3;
@@ -332,7 +339,7 @@ div#content {
 
     .left {
       display: grid;
-      grid-template: 5fr 1fr 5fr 1fr / 1fr 4fr 2fr;
+      grid-template: 5fr 1fr 5fr 1fr / 1fr 4fr 1fr;
       align-items: start;
       gap: 20px 40px;
       
@@ -358,7 +365,7 @@ div#content {
 
     .right {
       display: grid;
-      grid-template: 220px 1fr 1fr / 1fr 1fr;
+      grid-template: 300px 1fr 1fr / 1fr 1fr;
       row-gap: 15px;
       place-items: center;
 
@@ -374,10 +381,11 @@ div#content {
         gap: 10px 10px;
 
         padding: 0px 20px;
-        max-height: 220px;
+        max-height: 100%;
         overflow-y: auto;
 
         label {
+          overflow: hidden;
           word-wrap: break-word;
           font-size: 0.8rem;
         }
@@ -412,9 +420,15 @@ div#content {
           font-size: 0.7rem;
         }
 
+        label {
+          place-self: center;
+          text-align: center;
+          font-size: 0.9rem;
+        }
+
         .add-check-btn {
           place-self: center;
-          font-size: 0.6rem;
+          font-size: 0.8rem;
           padding: 0px 8px;
           background-color: #90ee90;
           &:hover { background-color: #a0eea0; }
@@ -432,6 +446,10 @@ div#content {
         background-color: #ff0000;
         &:hover { background-color: #ff3535; }
         &:active { background-color: #ff4747; }
+      }
+
+      button {
+        font-size: 0.9rem;
       }
     }
 
@@ -455,7 +473,7 @@ div#content {
     }
 
     label:not(.check-label) {
-      font-size: 0.8rem;
+      font-size: 1rem;
       color: grey;
     }
   }
@@ -488,6 +506,39 @@ div.footer {
     &:hover {
       stroke: black;
       fill: white;
+    }
+  }
+}
+
+@media (max-width: 1350px) {
+  .expand-container {
+    form {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 9fr 8fr;
+
+      .top {
+        grid-column: 1 / 2;
+        grid-template-columns: 1fr 9fr;
+      }
+
+      .left {
+        grid-template: 5fr 1fr 5fr 1fr / 1fr 8fr 1fr;
+      }
+
+      .right {
+
+        .checklist {
+          grid-template-columns: 1fr 20fr 1fr;
+        }
+
+        .add-check-div {
+          width: 100%;
+        }
+      }
+
+      label:not(.check-label) {
+        font-size: 0.8rem;
+      }
     }
   }
 }
