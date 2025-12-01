@@ -140,6 +140,7 @@ div#content {
 
   div.projects-container {
     display: flex;
+    width: var(--project-container-width);
     flex-direction: column;
     gap: 2px;
     align-items: center;
@@ -157,11 +158,11 @@ div#content {
     }
 
     .project {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: grid;
+      place-items: center stretch;
+      grid-template-columns: 9fr 1fr;
+      column-gap: 8px;
 
-      word-wrap: break-word;
       appearance: none;
       cursor: pointer;
       background-color: #faebd7;
@@ -170,6 +171,13 @@ div#content {
       height: 60px;
       font-size: 1rem;
       border: 2px solid black;
+
+      span {
+        word-wrap: break-word;
+        text-align: left;
+        overflow: hidden;
+        font-size: 0.9rem;
+      }
 
       box-shadow: 1px 1px 1px black;
       transition: background-color 0.3s, transform 0.3s ease-out, box-shadow 0.3s;
@@ -362,7 +370,7 @@ div#content {
         place-self: start;
         display: grid;
         align-items: center;
-        grid-template-columns: 1fr 4fr 1fr;
+        grid-template-columns: 1fr 8fr 1fr;
         gap: 10px 10px;
 
         padding: 0px 20px;
@@ -371,7 +379,6 @@ div#content {
 
         label {
           word-wrap: break-word;
-          width: 200px;
           font-size: 0.8rem;
         }
 
