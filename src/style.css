@@ -99,6 +99,7 @@ div#content {
 
       .description {
         grid-column: 1 / 4;
+        font-size: 1.1rem;
       }
 
       .description, .title {
@@ -119,7 +120,7 @@ div#content {
 
       .due-date, .priority {
         white-space: pre-wrap;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
       }
 
       .cross {
@@ -189,7 +190,7 @@ div#content {
         word-wrap: break-word;
         text-align: left;
         overflow: hidden;
-        font-size: 1rem;
+        font-size: 1.2rem;
       }
 
       box-shadow: 1px 1px 1px black;
@@ -263,7 +264,7 @@ div#content {
       }
 
       #add-project-input {
-        font-size: 0.9rem;
+        font-size: 1rem;
         border-right: none;
         border-top-left-radius: 2px;
         border-bottom-left-radius: 2px;
@@ -446,7 +447,7 @@ div#content {
         #add-check {
           resize: none;
           grid-area: 1 / 2 / 3 / 3;
-          font-size: 0.7rem;
+          font-size: 0.9rem;
         }
 
         label {
